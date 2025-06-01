@@ -31,6 +31,12 @@ const prompt = ai.definePrompt({
   name: 'ollamaResponsePrompt',
   input: {schema: GenerateOllamaResponseInputSchema},
   output: {schema: GenerateOllamaResponseOutputSchema},
+  // Specify the Ollama model to be used for this prompt.
+  // Make sure you have this model (e.g., 'llama2') available in your Ollama instance.
+  // You can change 'ollama/llama2' to any other Ollama model you prefer, like 'ollama/mistral'.
+  config: {
+    model: 'ollama/llama2', 
+  },
   prompt: `You are a helpful AI assistant.  Respond to the user's message below. Take into account the chat history to maintain context.
 
 Chat History:
@@ -48,7 +54,8 @@ const generateOllamaResponseFlow = ai.defineFlow(
     outputSchema: GenerateOllamaResponseOutputSchema,
   },
   async input => {
-    const {output} = await prompt(input);
-    return output!;
+    // The 'prompt' object will now use the model specified in its config (e.g., 'ollama/llama2').
+    const response = await prompt(input);
+    return response.output!;
   }
 );
